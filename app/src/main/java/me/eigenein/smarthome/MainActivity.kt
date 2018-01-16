@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
+import android.widget.Toast
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
@@ -55,6 +56,7 @@ class MainActivity : AppCompatActivity() {
             .subscribe({
                 // TODO
                 Log.i(TAG, "Response: ${it.toJSONObject()}")
+                Toast.makeText(this, it.toJSONObject().toString(), Toast.LENGTH_LONG).show()
             }, {
                 // TODO
                 Log.e(TAG, "Datagram receive error.", it)
