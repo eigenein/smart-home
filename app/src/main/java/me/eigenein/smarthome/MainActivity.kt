@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.widget.Toast
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -19,6 +20,8 @@ class MainActivity : AppCompatActivity() {
         private const val SERVICE_TYPE = "_smart-home._udp."
         private const val SOCKET_TIMEOUT_MILLIS = 10000
     }
+
+    private val disposable = CompositeDisposable()
 
     private lateinit var nsdManager: NsdManager
 
@@ -40,6 +43,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onPause() {
+        disposable.clear()
         nsdManager.stopServiceDiscovery(discoveryListener)
         super.onPause()
     }
