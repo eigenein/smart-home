@@ -13,7 +13,6 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import me.eigenein.smarthome.extensions.addTo
-import me.eigenein.smarthome.extensions.toJSONObject
 
 class MainActivity : AppCompatActivity() {
     companion object {
@@ -40,8 +39,8 @@ class MainActivity : AppCompatActivity() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe({
-                Log.i(TAG, "Response: ${it.toJSONObject()}")
-                Toast.makeText(this, it.toJSONObject().toString(), Toast.LENGTH_LONG).show()
+                Log.i(TAG, "Response: $it")
+                Toast.makeText(this, it.toString(), Toast.LENGTH_LONG).show()
             }, {
                 Log.e(TAG, "Device discovery error.", it)
             })
