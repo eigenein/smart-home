@@ -1,4 +1,4 @@
-package me.eigenein.smarthome
+package me.eigenein.smarthome.extensions
 
 import org.json.JSONObject
 import java.net.DatagramPacket

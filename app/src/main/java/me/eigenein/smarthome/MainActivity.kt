@@ -12,18 +12,15 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
-import org.json.JSONObject
+import me.eigenein.smarthome.extensions.addTo
+import me.eigenein.smarthome.extensions.toJSONObject
 
 class MainActivity : AppCompatActivity() {
     companion object {
         private val TAG = MainActivity::class.java.simpleName
-        private const val SERVICE_TYPE = "_smart-home._udp."
-        private const val SOCKET_TIMEOUT_MILLIS = 10000
     }
 
     private val disposable = CompositeDisposable()
-
-    private lateinit var nsdManager: NsdManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,35 +35,21 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        nsdManager = getSystemService(Context.NSD_SERVICE) as NsdManager
-        nsdManager.discoverServices(SERVICE_TYPE, NsdManager.PROTOCOL_DNS_SD, discoveryListener)
+        DeviceManager
+            .discover(getSystemService(Context.NSD_SERVICE) as NsdManager)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe({
+                Log.i(TAG, "Response: ${it.toJSONObject()}")
+                Toast.makeText(this, it.toJSONObject().toString(), Toast.LENGTH_LONG).show()
+            }, {
+                Log.e(TAG, "Device discovery error.", it)
+            })
+            .addTo(disposable)
     }
 
     override fun onPause() {
         disposable.clear()
-        nsdManager.stopServiceDiscovery(discoveryListener)
         super.onPause()
-    }
-
-    private val discoveryListener = OnServiceFoundDiscoveryListener {
-        Log.i(TAG, "Service found: $it")
-        val helper = DatagramSocketHelper({ soTimeout = SOCKET_TIMEOUT_MILLIS })
-        NsdManagerHelper(nsdManager)
-            .resolve(it)
-            .flatMapCompletable({ helper.send(JSONObject("""{"type": "ping"}""").toDatagramPacket(it.host, it.port)) })
-            .andThen(helper.receive(200))
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe({
-                // TODO
-                Log.i(TAG, "Response: ${it.toJSONObject()}")
-                Toast.makeText(this, it.toJSONObject().toString(), Toast.LENGTH_LONG).show()
-            }, {
-                // TODO
-                Log.e(TAG, "Datagram receive error.", it)
-            }, {
-                // TODO
-                Log.w(TAG, "Response is not received.")
-            })
     }
 }
