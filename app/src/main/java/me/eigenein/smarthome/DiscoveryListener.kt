@@ -5,9 +5,6 @@ import android.net.nsd.NsdServiceInfo
 import android.util.Log
 
 open class DiscoveryListener : NsdManager.DiscoveryListener {
-    companion object {
-        private val TAG = DiscoveryListener::class.java.simpleName
-    }
 
     override fun onServiceFound(serviceInfo: NsdServiceInfo) {
         Log.i(TAG, "Service found: $serviceInfo")
@@ -31,6 +28,10 @@ open class DiscoveryListener : NsdManager.DiscoveryListener {
 
     override fun onStopDiscoveryFailed(serviceType: String, errorCode: Int) {
         Log.e(TAG, "Discovery stop failed: $serviceType")
+    }
+
+    companion object {
+        private val TAG = DiscoveryListener::class.java.simpleName
     }
 }
 

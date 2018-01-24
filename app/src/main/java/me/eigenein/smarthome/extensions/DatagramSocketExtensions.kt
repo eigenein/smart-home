@@ -14,6 +14,8 @@ fun DatagramSocket.sendCompletable(packet: DatagramPacket) : Completable = Compl
     it.onComplete()
 }
 
+// TODO: listen for incoming datagrams.
+
 fun DatagramSocket.receiveMaybe(length: Int) : Maybe<DatagramPacket> = Maybe.create<DatagramPacket> {
     val buffer = ByteArray(length)
     val packet = DatagramPacket(buffer, buffer.size)

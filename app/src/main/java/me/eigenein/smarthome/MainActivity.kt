@@ -13,11 +13,9 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import me.eigenein.smarthome.extensions.addTo
+import me.eigenein.smarthome.ui.DeviceAdapter
 
 class MainActivity : AppCompatActivity() {
-    companion object {
-        private val TAG = MainActivity::class.java.simpleName
-    }
 
     private val disposable = CompositeDisposable()
 
@@ -29,6 +27,7 @@ class MainActivity : AppCompatActivity() {
 
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        recyclerView.adapter = DeviceAdapter()
     }
 
     override fun onResume() {
@@ -39,7 +38,7 @@ class MainActivity : AppCompatActivity() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe({
-                Log.i(TAG, "Response: $it")
+                Log.i(TAG, "Response: $it") // TODO: move this to the device.
                 Toast.makeText(this, it.toString(), Toast.LENGTH_LONG).show()
             }, {
                 Log.e(TAG, "Device discovery error.", it)
@@ -50,5 +49,9 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         disposable.clear()
         super.onPause()
+    }
+
+    companion object {
+        private val TAG = MainActivity::class.java.simpleName
     }
 }
