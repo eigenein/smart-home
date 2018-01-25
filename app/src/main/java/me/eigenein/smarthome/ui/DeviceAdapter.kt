@@ -4,14 +4,12 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import me.eigenein.smarthome.Device
 import me.eigenein.smarthome.R
-import java.net.InetAddress
 
 class DeviceAdapter : RecyclerView.Adapter<DeviceAdapter.Item.ViewHolder>() {
 
     // FIXME: this is just to test.
-    private val items: List<Item> = listOf(RGBItem(Device(InetAddress.getLoopbackAddress(), 0)))
+    private val items: List<Item> = listOf(RGBItem())
 
     override fun getItemCount() = items.size
 
@@ -35,7 +33,7 @@ class DeviceAdapter : RecyclerView.Adapter<DeviceAdapter.Item.ViewHolder>() {
         }
     }
 
-    abstract class Item(device: Device) {
+    abstract class Item() {
         abstract val itemViewType: Int
 
         abstract class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

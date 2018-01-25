@@ -1,7 +1,14 @@
 package me.eigenein.smarthome.extensions
 
-import org.json.JSONObject
+import android.util.Log
 import java.net.DatagramPacket
+import java.net.DatagramSocket
 
-fun DatagramPacket.toJSONObject() =
-    JSONObject(data.sliceArray(0..length).toString(Charsets.UTF_8))
+private val TAG = DatagramSocket::class.java.simpleName
+
+fun DatagramPacket.toByteArray() = data.sliceArray(0..length)
+
+fun DatagramPacket.sendTo(socket: DatagramSocket) {
+    Log.d(TAG, "Sending $length bytes to $socketAddress")
+    socket.send(this)
+}

@@ -5,7 +5,6 @@ import android.net.nsd.NsdManager
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.widget.Toast
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -33,16 +32,23 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        DeviceManager
-            .discover(getSystemService(Context.NSD_SERVICE) as NsdManager)
+        val deviceManager = DeviceManager()
+
+        deviceManager
+            .listen()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .subscribe({
-                Log.i(TAG, "Response: $it") // TODO: move this to the device.
+            .subscribe {
                 Toast.makeText(this, it.toString(), Toast.LENGTH_LONG).show()
-            }, {
-                Log.e(TAG, "Device discovery error.", it)
-            })
+            }
+            .addTo(disposable)
+
+        DeviceManager
+            .discover(getSystemService(Context.NSD_SERVICE) as NsdManager)
+            .flatMapCompletable { deviceManager.send(it, RequestBuilder.ping()) }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe()
             .addTo(disposable)
     }
 
