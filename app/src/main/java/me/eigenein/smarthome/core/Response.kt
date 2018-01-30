@@ -1,4 +1,4 @@
-package me.eigenein.smarthome
+package me.eigenein.smarthome.core
 
 import org.json.JSONObject
 
@@ -13,22 +13,18 @@ data class Response(
         response: JSONObject,
         deviceType: DeviceType = DeviceType.valueOf(response.getString("deviceType"))
     ) : this(
-        response.optInt("messageId", 0),
-        response.getString("uuid"),
-        deviceType,
-        if (deviceType == DeviceType.RGB) RGBResponse(response) else null
+        messageId = response.optInt("messageId", 0),
+        uuid = response.getString("uuid"),
+        deviceType = deviceType,
+        rgbResponse = if (deviceType == DeviceType.RGB) RGBResponse(response) else null
     )
 
     data class RGBResponse(val red: Int, val green: Int, val blue: Int) {
 
         constructor(response: JSONObject) : this(
-            response.optInt("red", 0),
-            response.optInt("green", 0),
-            response.optInt("blue", 0)
+            red = response.optInt("red", 0),
+            green = response.optInt("green", 0),
+            blue = response.optInt("blue", 0)
         )
-    }
-
-    enum class DeviceType(descriptionResourceId: Int) {
-        RGB(R.string.device_type_rgb)
     }
 }

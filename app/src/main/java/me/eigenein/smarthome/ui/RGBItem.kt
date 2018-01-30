@@ -2,8 +2,9 @@ package me.eigenein.smarthome.ui
 
 import android.view.View
 import me.eigenein.smarthome.R
+import me.eigenein.smarthome.core.Device
 
-class RGBItem() : DeviceAdapter.Item() {
+class RGBItem(device: Device) : DeviceAdapter.Item(device) {
     override val itemViewType = R.layout.item_rgb
 
     init {

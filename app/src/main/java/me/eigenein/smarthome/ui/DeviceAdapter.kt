@@ -5,11 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import me.eigenein.smarthome.R
+import me.eigenein.smarthome.core.Device
+import me.eigenein.smarthome.core.Response
 
 class DeviceAdapter : RecyclerView.Adapter<DeviceAdapter.Item.ViewHolder>() {
 
-    // FIXME: this is just to test.
-    private val items: List<Item> = listOf(RGBItem())
+    private val items = listOf<Item>()
 
     override fun getItemCount() = items.size
 
@@ -25,6 +26,10 @@ class DeviceAdapter : RecyclerView.Adapter<DeviceAdapter.Item.ViewHolder>() {
 
     override fun onBindViewHolder(holder: Item.ViewHolder, position: Int) = holder.bind(items[position])
 
+    fun handleResponse(response: Response) {
+        // TODO
+    }
+
     companion object {
         private val viewHolders: MutableMap<Int, (View) -> DeviceAdapter.Item.ViewHolder> = mutableMapOf()
 
@@ -33,7 +38,7 @@ class DeviceAdapter : RecyclerView.Adapter<DeviceAdapter.Item.ViewHolder>() {
         }
     }
 
-    abstract class Item() {
+    abstract class Item(val device: Device) {
         abstract val itemViewType: Int
 
         abstract class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

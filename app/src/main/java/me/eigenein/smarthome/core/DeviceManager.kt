@@ -1,4 +1,4 @@
-package me.eigenein.smarthome
+package me.eigenein.smarthome.core
 
 import android.net.nsd.NsdManager
 import android.util.Log
@@ -6,7 +6,6 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import me.eigenein.smarthome.extensions.*
-import org.json.JSONObject
 import java.net.DatagramSocket
 import java.net.SocketException
 
@@ -55,11 +54,11 @@ class DeviceManager {
         }
     }, BackpressureStrategy.BUFFER)
 
-    fun send(address: DeviceAddress, request: JSONObject): Completable = Completable.create {
-        request
+    fun send(request: Request): Completable = Completable.create {
+        request.payload
             .toString()
             .toByteArray(Charsets.UTF_8)
-            .toDatagramPacket(address.host, address.port)
+            .toDatagramPacket(request.address.host, request.address.port)
             .sendTo(socket)
         it.onComplete()
     }

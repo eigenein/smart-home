@@ -1,4 +1,4 @@
-package me.eigenein.smarthome
+package me.eigenein.smarthome.core
 
 import java.net.InetAddress
 
