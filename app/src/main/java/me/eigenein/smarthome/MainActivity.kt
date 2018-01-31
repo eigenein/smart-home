@@ -11,7 +11,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import me.eigenein.smarthome.core.DeviceManager
-import me.eigenein.smarthome.core.PingRequest
+import me.eigenein.smarthome.core.requests.PingRequest
 import me.eigenein.smarthome.extensions.addTo
 import me.eigenein.smarthome.ui.DeviceAdapter
 
@@ -55,9 +55,5 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         disposable.clear()
         super.onPause()
-    }
-
-    companion object {
-        private val TAG = MainActivity::class.java.simpleName
     }
 }

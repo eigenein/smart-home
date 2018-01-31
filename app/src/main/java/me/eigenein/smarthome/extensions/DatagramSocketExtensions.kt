@@ -10,6 +10,6 @@ fun DatagramSocket.receive(length: Int): DatagramPacket {
     val buffer = ByteArray(length)
     val packet = DatagramPacket(buffer, buffer.size)
     receive(packet)
-    Log.d(TAG, "Received ${packet.length} from ${packet.socketAddress}")
+    Log.d(TAG, "Received ${packet.length} bytes from ${packet.socketAddress}")
     return packet
 }

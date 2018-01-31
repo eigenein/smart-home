@@ -2,6 +2,6 @@ package me.eigenein.smarthome.core
 
 import me.eigenein.smarthome.R
 
-enum class DeviceType(descriptionResourceId: Int) {
-    RGB(R.string.device_type_rgb)
+enum class DeviceType(val descriptionResourceId: Int) {
+    MulticolorLighting(R.string.device_type_multicolor_lighting)
 }

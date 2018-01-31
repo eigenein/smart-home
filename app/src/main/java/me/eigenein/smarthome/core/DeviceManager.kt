@@ -37,13 +37,7 @@ class DeviceManager {
         it.setCancellable { socket.close() }
         while (true) {
             try {
-                socket
-                    .receive(DATAGRAM_SIZE)
-                    .toByteArray()
-                    .toString(Charsets.UTF_8)
-                    .toJSONObject()
-                    .toResponse()
-                    .emitTo(it)
+                socket.receive(DATAGRAM_SIZE).toResponse().emitTo(it)
             } catch (throwable: SocketException) {
                 Log.w(TAG, throwable.message)
                 it.onComplete()
@@ -55,11 +49,7 @@ class DeviceManager {
     }, BackpressureStrategy.BUFFER)
 
     fun send(request: Request): Completable = Completable.create {
-        request.payload
-            .toString()
-            .toByteArray(Charsets.UTF_8)
-            .toDatagramPacket(request.address.host, request.address.port)
-            .sendTo(socket)
+        request.toDatagramPacket(request.address.address, request.address.port).sendTo(socket)
         it.onComplete()
     }
 }
