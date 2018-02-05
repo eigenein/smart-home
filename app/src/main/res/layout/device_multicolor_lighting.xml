@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/item_base_card_view"
+    android:id="@+id/multicolorLightingCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
@@ -15,21 +15,81 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include layout="@layout/device_title"/>
+        <TextView
+            android:id="@+id/multicolorLightingTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:textColor="?android:textColorPrimary"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
-        <include layout="@layout/device_subtitle"/>
+        <TextView
+            android:id="@+id/multicolorLightingSubtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:textColor="?android:textColorSecondary"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/multicolorLightingTitle"/>
 
-        <Button
+        <View
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:background="#1F000000"
+            app:layout_constraintTop_toBottomOf="@id/multicolorLightingSubtitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:minHeight="48dp"
+            android:minWidth="48dp"
+            android:background="?android:selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_palette_black_24dp"
+            android:tint="#8A000000"
+            app:layout_constraintTop_toBottomOf="@id/divider"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <Button
+            android:id="@+id/multicolorLightingOnButton"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:radius="2dp"
-            android:text="Action"
+            android:text="Turn on"
             android:textAppearance="?android:attr/textAppearanceButton"
             android:textColor="?attr/colorAccent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/item_base_subtitle"
+            app:layout_constraintEnd_toStartOf="@id/multicolorLightingOffButton"
+            app:layout_constraintTop_toBottomOf="@id/divider"/>
+
+        <Button
+            android:id="@+id/multicolorLightingOffButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:radius="2dp"
+            android:text="Turn off"
+            android:textAppearance="?android:attr/textAppearanceButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider"
             style="?android:attr/borderlessButtonStyle"/>
     </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>

@@ -57,11 +57,11 @@ class DeviceAdapter : RecyclerView.Adapter<DeviceAdapter.Item.ViewHolder>() {
         abstract val itemViewType: Int
 
         abstract class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            private var titleTextView = itemView.findViewById<TextView>(R.id.device_title)
-            private var subtitleTextView = itemView.findViewById<TextView>(R.id.item_base_subtitle)
+            private var titleTextView = itemView.findViewById<TextView>(R.id.multicolorLightingTitle)
+            private var subtitleTextView = itemView.findViewById<TextView>(R.id.multicolorLightingSubtitle)
 
             open fun bind(item: Item) {
-                titleTextView.text = item.device.lastResponse.uuid
+                titleTextView.text = item.device.lastResponse.name
                 subtitleTextView.setText(item.device.lastResponse.deviceType.descriptionResourceId)
             }
         }

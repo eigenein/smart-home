@@ -25,6 +25,7 @@ fun DatagramPacket.toResponse() : Response {
         messageId = payload.optInt("messageId", 0),
         uuid = payload.getString("uuid"),
         deviceType = deviceType,
+        name = payload.getString("name"),
         status = when (deviceType) {
             DeviceType.MULTICOLOR_LIGHTING -> MulticolorLightingStatus(payload)
         }

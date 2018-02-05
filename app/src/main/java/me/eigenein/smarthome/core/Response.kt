@@ -5,5 +5,6 @@ data class Response(
     val messageId: Int,
     val uuid: String,
     val deviceType: DeviceType,
+    val name: String,
     val status: Status
 )
