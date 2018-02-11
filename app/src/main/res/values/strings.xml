@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Smart Home</string>
     <string name="device_type_multicolor_lighting">Multicolor Lighting</string>
+    <string name="turn_on">Turn on</string>
+    <string name="turn_off">Turn off</string>
+    <string name="content_description_choose_color">Choose color</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok" translatable="false">OK</string>
 </resources>

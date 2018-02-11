@@ -1,10 +1,10 @@
 package me.eigenein.smarthome.core
 
-data class Response(
-    val deviceAddress: DeviceAddress,
+data class DeviceState(
+    val address: DeviceAddress,
     val messageId: Int,
     val uuid: String,
     val deviceType: DeviceType,
     val name: String,
-    val status: Status
+    val customState: DeviceCustomState
 )

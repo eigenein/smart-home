@@ -4,12 +4,12 @@ import me.eigenein.smarthome.core.Request
 import me.eigenein.smarthome.extensions.init
 import org.json.JSONObject
 
-data class PingRequest(val unused: Unit = Unit) : Request {
+data class TurnOffRequest(val unused: Unit = Unit) : Request {
     override val payload = PAYLOAD
 
     companion object {
         private val PAYLOAD = JSONObject().init {
-            put("type", "PING")
+            put("type", "TURN_OFF")
         }
     }
 }

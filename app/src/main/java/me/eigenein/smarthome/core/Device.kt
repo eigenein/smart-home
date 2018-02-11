@@ -1,3 +1,3 @@
 package me.eigenein.smarthome.core
 
-data class Device(var lastResponse: Response)
+data class Device(var state: DeviceState)

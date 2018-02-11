@@ -1,4 +1,4 @@
 package me.eigenein.smarthome.core
 
-interface Status {
+interface DeviceCustomState {
 }

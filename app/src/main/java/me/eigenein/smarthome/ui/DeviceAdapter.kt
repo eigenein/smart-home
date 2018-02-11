@@ -6,19 +6,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import io.reactivex.disposables.CompositeDisposable
 import me.eigenein.smarthome.R
 import me.eigenein.smarthome.core.Device
-import me.eigenein.smarthome.core.Response
+import me.eigenein.smarthome.core.DeviceState
+import me.eigenein.smarthome.core.DeviceType
 
-class DeviceAdapter : RecyclerView.Adapter<DeviceAdapter.Item.ViewHolder>() {
+class DeviceAdapter : RecyclerView.Adapter<DeviceAdapter.ViewHolder>() {
 
-    private val items = mutableListOf<Item>()
+    private val devices = mutableListOf<Device>()
 
-    override fun getItemCount() = items.size
+    override fun getItemCount() = devices.size
 
-    override fun getItemViewType(position: Int) = items[position].itemViewType
+    override fun getItemViewType(position: Int) = devices[position].state.deviceType.layoutResourceId
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Item.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return viewHolders.getValue(viewType)(
             LayoutInflater
                 .from(parent.context)
@@ -26,44 +28,48 @@ class DeviceAdapter : RecyclerView.Adapter<DeviceAdapter.Item.ViewHolder>() {
         )
     }
 
-    override fun onBindViewHolder(holder: Item.ViewHolder, position: Int) = holder.bind(items[position])
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(devices[position])
 
-    fun handleResponse(response: Response) {
-        val index = items.indexOfFirst { it.device.lastResponse.uuid == response.uuid }
+    override fun onViewDetachedFromWindow(holder: ViewHolder) = holder.dispose()
+
+    fun handleResponse(state: DeviceState) {
+        Log.v(TAG, "Received $state")
+        val index = devices.indexOfFirst { it.state.uuid == state.uuid }
         if (index != -1) {
-            val device = items[index].device
-            Log.d(TAG, "Updating existing device $device")
-            device.lastResponse = response
-            notifyItemChanged(index)
+            val device = devices[index]
+            Log.v(TAG, "Updating existing device $device")
+            device.state = state
+            notifyItemChanged(index, Unit) // payload is passed to prevent the view holder disposal
         } else {
-            val device = Device(response)
-            Log.d(TAG, "Discovered new device $device")
-            items.add(DeviceItemBuilder.build(device))
-            notifyItemInserted(items.size - 1)
+            val device = Device(state)
+            Log.i(TAG, "Discovered new device $device")
+            devices.add(device)
+            notifyItemInserted(devices.size - 1)
         }
     }
 
     companion object {
         private val TAG = DeviceAdapter::class.java.simpleName
 
-        private val viewHolders: MutableMap<Int, (View) -> DeviceAdapter.Item.ViewHolder> = mutableMapOf()
-
-        fun registerViewType(viewType: Int, createViewHolder: (View) -> DeviceAdapter.Item.ViewHolder) {
-            viewHolders[viewType] = createViewHolder
-        }
+        private val viewHolders: MutableMap<Int, (View) -> DeviceAdapter.ViewHolder> = mutableMapOf(
+            DeviceType.MULTICOLOR_LIGHTING.layoutResourceId to ::MulticolorLightingViewHolder
+        )
     }
 
-    abstract class Item(val device: Device) {
-        abstract val itemViewType: Int
+    abstract class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        protected val disposable = CompositeDisposable()
 
-        abstract class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            private var titleTextView = itemView.findViewById<TextView>(R.id.multicolorLightingTitle)
-            private var subtitleTextView = itemView.findViewById<TextView>(R.id.multicolorLightingSubtitle)
+        protected lateinit var device: Device
 
-            open fun bind(item: Item) {
-                titleTextView.text = item.device.lastResponse.name
-                subtitleTextView.setText(item.device.lastResponse.deviceType.descriptionResourceId)
-            }
+        private var titleTextView = itemView.findViewById<TextView>(R.id.multicolorLightingTitle)
+        private var subtitleTextView = itemView.findViewById<TextView>(R.id.multicolorLightingSubtitle)
+
+        open fun bind(device: Device) {
+            this.device = device
+            titleTextView.text = device.state.name
+            subtitleTextView.setText(device.state.deviceType.descriptionResourceId)
         }
+
+        fun dispose() = disposable.clear()
     }
 }
