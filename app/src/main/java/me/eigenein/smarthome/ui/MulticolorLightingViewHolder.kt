@@ -6,6 +6,7 @@ import android.widget.ImageButton
 import com.flask.colorpicker.ColorPickerView
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import me.eigenein.smarthome.R
 import me.eigenein.smarthome.core.Device
 import me.eigenein.smarthome.core.DeviceManager
@@ -13,7 +14,7 @@ import me.eigenein.smarthome.core.requests.SetColorRequest
 import me.eigenein.smarthome.core.requests.TurnOffRequest
 import me.eigenein.smarthome.core.requests.TurnOnRequest
 import me.eigenein.smarthome.core.states.MulticolorLightingState
-import me.eigenein.smarthome.extensions.applySchedulersAndSubscribe
+import me.eigenein.smarthome.extensions.addTo
 import me.eigenein.smarthome.extensions.showFlowable
 import java.util.concurrent.TimeUnit
 
@@ -34,19 +35,27 @@ class MulticolorLightingViewHolder(itemView: View) : DeviceAdapter.ViewHolder(it
                 .lightnessSliderOnly()
                 .showFlowable(state.toColor())
                 .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(Schedulers.io())
                 .debounce(20, TimeUnit.MILLISECONDS)
                 .flatMapCompletable { DeviceManager.send(device.state.address, SetColorRequest.fromColor(it)) }
-                .applySchedulersAndSubscribe(disposable)
+                .subscribe()
+                .addTo(disposable)
         }
         turnOnButton.setOnClickListener {
             DeviceManager
                 .send(device.state.address, TurnOnRequest())
-                .applySchedulersAndSubscribe(disposable)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe()
+                .addTo(disposable)
         }
         turnOffButton.setOnClickListener {
             DeviceManager
                 .send(device.state.address, TurnOffRequest())
-                .applySchedulersAndSubscribe(disposable)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe()
+                .addTo(disposable)
         }
     }
 
