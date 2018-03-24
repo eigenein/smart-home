@@ -9,7 +9,7 @@ data class TurnOnRequest(val unused: Unit = Unit) : Request {
 
     companion object {
         private val PAYLOAD = JSONObject().init {
-            put("type", "TURN_ON")
+            put("t", "TURN_ON")
         }
     }
 }

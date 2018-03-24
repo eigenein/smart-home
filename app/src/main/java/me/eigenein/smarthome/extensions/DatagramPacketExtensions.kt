@@ -19,11 +19,11 @@ fun DatagramPacket.sendTo(socket: DatagramSocket) {
 
 fun DatagramPacket.toDeviceState() : DeviceState {
     val payload = this.toByteArray().toString(Charsets.UTF_8).toJSONObject()
-    val deviceType = DeviceType.valueOf(payload.getString("deviceType"))
+    val deviceType = DeviceType.valueOf(payload.getString("t"))
     return DeviceState(
         address = DeviceAddress.from(this),
-        messageId = payload.optInt("messageId", 0),
-        uuid = payload.getString("uuid"),
+        messageId = payload.optInt("mid", 0),
+        uuid = payload.getString("id"),
         deviceType = deviceType,
         name = payload.getString("name"),
         customState = when (deviceType) {

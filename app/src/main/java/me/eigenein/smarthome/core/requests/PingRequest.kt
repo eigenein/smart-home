@@ -9,7 +9,7 @@ data class PingRequest(val unused: Unit = Unit) : Request {
 
     companion object {
         private val PAYLOAD = JSONObject().init {
-            put("type", "PING")
+            put("t", "PING")
         }
     }
 }

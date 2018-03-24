@@ -8,10 +8,10 @@ import org.json.JSONObject
 
 data class SetColorRequest(private val red: Float, private val green: Float, private val blue: Float) : Request {
     override val payload = JSONObject().init {
-        put("type", "SET_COLOR")
-        put("red", red)
-        put("green", green)
-        put("blue", blue)
+        put("t", "SET_COLOR")
+        put("r", red)
+        put("g", green)
+        put("b", blue)
     }
 
     companion object {
